@@ -1,0 +1,65 @@
+{
+	"id": "8dd5db3c",
+	"name": "Eye of Providence",
+	"description": "Tool for plugin developers. Shows selected layer details in Console. Menu > Plugins > Develpment > Developer console",
+	"summary": "Layer inspector for developers",
+	"keywords":[
+		"inspector","dev","devtool","layer","properties"
+	],
+	"helpUrl":"https://github.com/jardicc/XD-eye-of-providence/blob/master/README.md",
+	"languages":["en"],
+	"author":"Jaroslav Bereza",
+	"icons": [
+		{
+		"width": 48,
+		"height": 48,
+		"path": "48.png"
+		},
+		{
+		"width": 96,
+		"height": 96,
+		"path": "96.png"
+		},
+		{
+		"width": 144,
+		"height": 144,
+		"path": "144.png"
+		},
+		{
+		"width": 192,
+		"height": 192,
+		"path": "192.png"
+		}
+	],
+	"version": "2.0.0",
+	"host": {
+		"app": "XD",
+		"minVersion": "14.0"
+	},
+	"uiEntryPoints": [
+		{
+			"type": "menu",
+			"label": "👁️ Eye of Providence",
+			"menuItems": [
+				{
+					"type": "menu",
+					"label": "Inspect in console",
+					"commandId": "seeMeInConsole",
+					"shortcut": {
+						"mac": "Ctrl+Q",
+						"win": "Ctrl+Q"
+					}
+				},
+				{
+					"type": "menu",
+					"label": "Inspect in dialog",
+					"commandId": "seeMeInModal",
+					"shortcut": {
+						"mac": "Ctrl+Shift+Q",
+						"win": "Ctrl+Shift+Q"
+					}
+				}
+			]
+		}
+	]
+}
