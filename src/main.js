@@ -1,37 +1,43 @@
 require('./JSON-decycle.js')
+const scenegraph = require("scenegraph");
 
 /*
 	Author: Jaroslav Bereza - https://bereza.cz/ps
 	License: MIT
 */
 
-function see(items) {
+let textarea, h1, h2;
 
-	if(items.length < 1){
-		return ("//////////////////////////////////////////\n"+
-		" PLEASE SELECT LAYER \n"+
-		"//////////////////////////////////////////\n")
+function setName(items) {
+	var item = items[0];
+	if (items.length < 1) {
+		h1.textContent = "PLEASE SELECT LAYER ";
+		h2.textContent = "";
+	} else {
+		var itemType = item.constructor.name;
+		h1.textContent = item.name;
+		h2.textContent = `[${itemType}]`;
 	}
+}
+
+function see(items) {
+	if (items.length < 1) {
+		return ("")
+	}
+
 	var item = items[0];
 
-	var itemType = item.constructor.name;
-	var output = ""
-
-	output+="//////////////////////////////////////////\n";
-	output+=item.name+" ("+itemType+")\n";
-	output+="//////////////////////////////////////////\n";
+	var output;
 	var props = getAllProperties(item).sort();
 
 	props.forEach((value) => {
 		const propType = typeof item[value];
 		if (propType === "function") {
-			output+=value + "()\n";
+			output += value + "()\n";
 		} else {
-			output+=value + ": " + print(item[value]) +"\n";
+			output += value + ": " + print(item[value]) + "\n";
 		}
 	})
-
-	output+="//////////////////////////////////////////\n";
 
 	return output;
 
@@ -54,56 +60,75 @@ function see(items) {
 	}
 }
 
-function seeMeInConsole(selection) {
-	
-	console.log(see(selection.items));
+function seeMeInPanel() {
+	textarea.value = see(scenegraph.selection.items);
+	setName(scenegraph.selection.items)
 }
 
-async function seeMeInModal(selection) {
+function createPanel(event) {
+	let pluginAreaWrapper = document.createElement("div");
+	pluginAreaWrapper.className = "pluginAreaWrapper";
 
-	let dialog = document.createElement("dialog");
+	h1 = document.createElement("h1");
+	h1.className = "h1";
+
+	h2 = document.createElement("h2");
+	h2.className = "color-blue";
+
 	let pluginArea = document.createElement("div");
-	Object.assign(pluginArea.style, {
-		display: "flex",
-		width: "800",
-		minHeight: "700px",
-		flexDirection: "column",
-		alignItems: "stretch",
-		justifyContent: "space-between"
-	  });
+	pluginArea.className = "pluginArea";
+	var css = `
+	* { 
 
-	let textarea = document.createElement("textarea");
+	}
+	.pluginArea {
+		display:flex;
+		flex-direction:column;
+		flex-grow:1;
+	}
+	.pluginAreaWrapper {
+		height:3000px;
+		display:flex;
+	}
+	.code {
+		display:flex;
+		flex-grow:1;
+		font-family: monospace;
+	}
+	`;
+
+	const style = document.createElement('style');
+	style.appendChild(document.createTextNode(css));
+	pluginArea.appendChild(style);
+
+
+	textarea = document.createElement("textarea");
 	textarea.setAttribute("autofocus", false);
-	textarea.readOnly = true;
-	Object.assign(textarea.style, {
-		display: "flex",
-		flexGrow:1
-	  });
-	textarea.value=see(selection.items);
+	textarea.className = "code";
+
+	pluginArea.appendChild(h2);
+	pluginArea.appendChild(h1);
 	pluginArea.appendChild(textarea);
 
-	let closeButton = document.createElement("button");
-	closeButton.setAttribute("uxp-variant", "cta");
-	closeButton.setAttribute("autofocus", true);
-	closeButton.textContent = "Close";
-	closeButton.addEventListener("click", (ev)=> {
-		dialog.close();
-		ev.preventDefault();
-	});
-	pluginArea.appendChild(closeButton);
+	pluginAreaWrapper.appendChild(pluginArea);
+	seeMeInPanel();
 
-	//  add our container to it
-	dialog.appendChild(pluginArea);
-
-	//  add the dialog to the main document
-	document.body.appendChild(dialog);
-	//  show the dialog
-	dialog.showModal();
+	return pluginAreaWrapper;
 }
 
 module.exports = {
-	commands: {
-		seeMeInModal: seeMeInModal,
-		seeMeInConsole: seeMeInConsole,
+	panels: {
+		seeMe: {
+			show(event) {
+				let panel = createPanel(event);
+				event.node.appendChild(panel);
+			},
+			hide(event) {
+				event.node.firstChild.remove();
+			},
+			update() {
+				seeMeInPanel();
+			}
+		}
 	}
 };

@@ -31,35 +31,20 @@
 		"path": "192.png"
 		}
 	],
-	"version": "2.0.0",
+	"version": "2.1.0",
 	"host": {
 		"app": "XD",
-		"minVersion": "14.0"
+		"minVersion": "18.0"
 	},
 	"uiEntryPoints": [
 		{
-			"type": "menu",
-			"label": "👁️ Eye of Providence",
-			"menuItems": [
-				{
-					"type": "menu",
-					"label": "Inspect in console",
-					"commandId": "seeMeInConsole",
-					"shortcut": {
-						"mac": "Ctrl+Q",
-						"win": "Ctrl+Q"
-					}
-				},
-				{
-					"type": "menu",
-					"label": "Inspect in dialog",
-					"commandId": "seeMeInModal",
-					"shortcut": {
-						"mac": "Ctrl+Shift+Q",
-						"win": "Ctrl+Shift+Q"
-					}
-				}
-			]
+			"type": "panel",
+			"label": "Eye of Providence",
+			"panelId": "seeMe",
+			"shortcut": {
+				"mac": "Ctrl+Q",
+				"win": "Ctrl+Q"
+			}
 		}
 	]
 }
